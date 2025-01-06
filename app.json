@@ -1,4 +1,7 @@
 {
   "name": "Digicollect",
-  "displayName": "Digicollect"
+  "displayName": "Digicollect",
+  "androidStatusBar": {
+    "translucent": false
+  }
 }
