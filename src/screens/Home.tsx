@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,9 +8,11 @@ import {
   Button,
   Alert,
   Text,
+  ScrollView,
 } from 'react-native';
 import {MIN_SCREEN} from '../constants/common';
 import {MenuInput} from '../components';
+import {KeyboardSpacer} from '../components/KeyboardSpace';
 
 const screen = Dimensions.get('window');
 
@@ -53,50 +55,64 @@ const styles = StyleSheet.create({
   p20: {
     padding: 20,
   },
+  ptAuto: {
+    paddingTop: screen.height * 0.1,
+  },
 });
 
 export const Home = () => {
+  const [scrollEnable, setScrollEnable] = useState(false);
   return (
-    <View style={[styles.container, styles.justifyCenter]}>
+    <View style={[styles.container]}>
       <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
-      <View
-        style={[styles.alignCenter, styles.justifyCenter, styles.borderImg]}>
-        <Image
-          source={require('../assets/images/background.png')}
-          style={styles.logoBackground}
-          resizeMode="contain"
-        />
-        <Image
-          source={require('../assets/images/logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-      </View>
+      <ScrollView scrollEnabled={scrollEnable}>
+        <View style={styles.ptAuto}>
+          <View
+            style={[
+              styles.alignCenter,
+              styles.justifyCenter,
+              styles.borderImg,
+            ]}>
+            <Image
+              source={require('../assets/images/background.png')}
+              style={styles.logoBackground}
+              resizeMode="contain"
+            />
+            <Image
+              source={require('../assets/images/logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
 
-      <Text style={styles.txtHeader}>Currency Converter</Text>
+          <Text style={styles.txtHeader}>Currency Converter</Text>
 
-      <MenuInput
-        label="USD"
-        inputType="numeric"
-        onBtnPress={() => Alert.alert('usd')}
-        onChangeText={(text: number) => console.log(text)}
-        KeyboardType="numeric"
-      />
+          <MenuInput
+            label="USD"
+            inputType="numeric"
+            onBtnPress={() => Alert.alert('usd')}
+            onChangeText={(text: number) => console.log(text)}
+            KeyboardType="numeric"
+          />
 
-      <MenuInput
-        label="IDR "
-        inputType="numeric"
-        onBtnPress={() => Alert.alert('idr')}
-        onChangeText={(text: number) => console.log(text)}
-      />
+          <MenuInput
+            label="IDR "
+            inputType="numeric"
+            onBtnPress={() => Alert.alert('idr')}
+            onChangeText={(text: number) => console.log(text)}
+          />
 
-      <Text style={styles.txtSubHeader}>
-        1 USD = 16.000 IDR as of January 9, 2025
-      </Text>
+          <Text style={styles.txtSubHeader}>
+            1 USD = 16.000 IDR as of January 9, 2025
+          </Text>
 
-      <View style={styles.p20}>
-        <Button color="#4f6d7a" title="Convert" onPress={() => {}} />
-      </View>
+          <View style={styles.p20}>
+            <Button color="#4f6d7a" title="Revert" onPress={() => {}} />
+          </View>
+
+          <KeyboardSpacer onToggle={isVisble => setScrollEnable(isVisble)} />
+        </View>
+      </ScrollView>
     </View>
   );
 };
