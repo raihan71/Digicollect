@@ -1,4 +1,5 @@
 import React from 'react';
-import {Home} from './src/screens';
+// import DrawerNavigator from './src/components/Navigations/Drawer';
+import StackNavigator from './src/components/Navigations/Stack';
 
-export default () => <Home />;
+export default () => <StackNavigator />;

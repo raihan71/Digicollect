@@ -9,10 +9,13 @@ import {
   Alert,
   Text,
   ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import {MIN_SCREEN} from '../constants/common';
 import {MenuInput} from '../components';
 import {KeyboardSpacer} from '../components/KeyboardSpace';
+import Icon from '@react-native-vector-icons/feather';
 
 const screen = Dimensions.get('window');
 
@@ -58,13 +61,25 @@ const styles = StyleSheet.create({
   ptAuto: {
     paddingTop: screen.height * 0.1,
   },
+  alignItemsEnd: {
+    alignItems: 'flex-end',
+  },
 });
 
-export const Home = () => {
+interface HomeProps {
+  navigation: any;
+}
+
+export const Home = ({navigation}: HomeProps) => {
   const [scrollEnable, setScrollEnable] = useState(false);
   return (
     <View style={[styles.container]}>
       <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
+      <SafeAreaView style={[styles.alignItemsEnd, styles.p20]}>
+        <TouchableOpacity onPress={() => navigation.push('Options')}>
+          <Icon name="settings" size={40} color="#4f6d7a" />
+        </TouchableOpacity>
+      </SafeAreaView>
       <ScrollView scrollEnabled={scrollEnable}>
         <View style={styles.ptAuto}>
           <View
