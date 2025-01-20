@@ -16,6 +16,8 @@ import {MenuInput} from '../components';
 import {KeyboardSpacer} from '../components/KeyboardSpace';
 import Icon from '@react-native-vector-icons/feather';
 import {NavigationProp} from '@react-navigation/native';
+import dayjs from 'dayjs';
+import {currencyFormat} from '../utils/currencyFormat';
 
 const screen = Dimensions.get('window');
 
@@ -80,9 +82,19 @@ interface HomeProps {
 }
 
 export const Home = ({navigation}: HomeProps) => {
-  const baseCurrency = 'USD';
-  const targetCurrency = 'IDR ';
+  const [baseCurrency, setBaseCurrency] = useState('USD');
+  const [targetCurrency, setTargetCurrency] = useState('IDR ');
+  const [baseValue, setBaseValue] = useState('1');
   const [scrollEnable, setScrollEnable] = useState(false);
+
+  const rates = 16360;
+  const dateNow = new Date();
+
+  const handleReverseCurrency = () => {
+    setBaseCurrency(targetCurrency);
+    setTargetCurrency(baseCurrency);
+  };
+
   return (
     <SafeAreaView style={[styles.container]}>
       <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
@@ -120,27 +132,39 @@ export const Home = ({navigation}: HomeProps) => {
               navigation.navigate('CurrencyList', {
                 title: 'Currency Base',
                 selectedCurrency: baseCurrency,
+                onChange: (val: any) => setBaseCurrency(val),
               })
             }
-            onChangeText={(text: number) => console.log(text)}
+            onChangeText={(text: string) => setBaseValue(text)}
             KeyboardType="numeric"
+            value={baseValue}
           />
           <MenuInput
+            editable={false}
             label={targetCurrency}
             inputType="numeric"
             onBtnPress={() =>
               navigation.navigate('CurrencyList', {
                 title: 'Currency Target',
                 selectedCurrency: targetCurrency,
+                onChange: (val: any) => setTargetCurrency(val),
               })
             }
-            onChangeText={(text: number) => console.log(text)}
+            value={
+              baseValue &&
+              `${currencyFormat((parseFloat(baseValue) * rates).toFixed(2))}`
+            }
           />
           <Text style={styles.txtSubHeader}>
-            1 USD = 16.000 IDR as of January 9, 2025
+            1 {baseCurrency} = {currencyFormat(rates)} {targetCurrency} as{' '}
+            {dayjs(dateNow).format('DD MMMM YYYY')}
           </Text>
           <View style={styles.p20}>
-            <Button color="#4f6d7a" title="Revert" onPress={() => {}} />
+            <Button
+              color="#4f6d7a"
+              title="Reverse"
+              onPress={handleReverseCurrency}
+            />
           </View>
           <KeyboardSpacer onToggle={isVisble => setScrollEnable(isVisble)} />
         </View>

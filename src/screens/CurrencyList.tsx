@@ -31,6 +31,23 @@ const PaddingButtom = ({insets}: any) => (
   <View style={{height: insets.bottom}} />
 );
 
+const Currencies = ({item, params, navigation}: any) => {
+  const selected = params?.selectedCurrency === item;
+  const handleSelected = () => {
+    if (params?.onChange) {
+      params.onChange(item);
+      navigation.goBack();
+    }
+  };
+  return (
+    <MenuList
+      label={item}
+      onPress={handleSelected}
+      icon={selected && <Icon name="check-circle" size={30} />}
+    />
+  );
+};
+
 const CurrencyList = ({navigation, route}: CurrencyListProps) => {
   const insets = useSafeAreaInsets();
   const {params} = route;
@@ -40,16 +57,7 @@ const CurrencyList = ({navigation, route}: CurrencyListProps) => {
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <FlatList
         data={currencies}
-        renderItem={({item}) => {
-          const selected = params?.selectedCurrency === item;
-          return (
-            <MenuList
-              label={item}
-              onPress={() => navigation.navigate('Home')}
-              icon={selected && <Icon name="check-circle" size={30} />}
-            />
-          );
-        }}
+        renderItem={({item}) => Currencies({item, params, navigation})}
         ItemSeparatorComponent={() => Separtor()}
         keyExtractor={item => item}
         ListFooterComponent={() => PaddingButtom({insets})}

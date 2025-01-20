@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#EBEBE4',
   },
   txtDisabled: {
-    color: '#C6C6C6',
+    color: '#bbb8b8',
   },
 });
 
@@ -60,24 +60,17 @@ export const MenuInput = ({
   ...rest
 }: MenuInputProps) => {
   return (
-    <View
-      tabIndex={0}
-      style={[
-        styles.container,
-        editable === false && styles.formInputDisabled,
-      ]}>
-      <TouchableOpacity
-        disabled={editable === false}
-        style={styles.btnSquare}
-        onPress={onBtnPress}>
-        <Text style={[styles.txt18, editable === false && styles.txtDisabled]}>
-          {label}
-        </Text>
+    <View tabIndex={0} style={styles.container}>
+      <TouchableOpacity style={styles.btnSquare} onPress={onBtnPress}>
+        <Text style={styles.txt18}>{label}</Text>
       </TouchableOpacity>
       <TextInput
         editable={editable}
         keyboardType={inputType}
-        style={styles.formInput}
+        style={[
+          styles.formInput,
+          editable === false && [styles.formInputDisabled, styles.txtDisabled],
+        ]}
         value={value}
         {...rest}
       />
