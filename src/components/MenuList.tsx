@@ -3,8 +3,8 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 interface MenuListProps {
   label: string;
-  icon: ReactNode;
-  onPress: () => void;
+  icon?: ReactNode;
+  onPress?: () => void;
 }
 
 const styles = StyleSheet.create({

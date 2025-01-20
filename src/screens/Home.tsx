@@ -6,7 +6,6 @@ import {
   Image,
   Dimensions,
   Button,
-  Alert,
   Text,
   ScrollView,
   SafeAreaView,
@@ -16,6 +15,7 @@ import {MIN_SCREEN} from '../constants/common';
 import {MenuInput} from '../components';
 import {KeyboardSpacer} from '../components/KeyboardSpace';
 import Icon from '@react-native-vector-icons/feather';
+import {NavigationProp} from '@react-navigation/native';
 
 const screen = Dimensions.get('window');
 
@@ -58,30 +58,43 @@ const styles = StyleSheet.create({
   p20: {
     padding: 20,
   },
+  p10: {
+    padding: 10,
+  },
   ptAuto: {
     paddingTop: screen.height * 0.1,
   },
   alignItemsEnd: {
     alignItems: 'flex-end',
   },
+  bgRed: {
+    backgroundColor: 'red',
+  },
+  bgBlue: {
+    backgroundColor: 'blue',
+  },
 });
 
 interface HomeProps {
-  navigation: any;
+  navigation: NavigationProp<any>;
 }
 
 export const Home = ({navigation}: HomeProps) => {
+  const baseCurrency = 'USD';
+  const targetCurrency = 'IDR ';
   const [scrollEnable, setScrollEnable] = useState(false);
   return (
-    <View style={[styles.container]}>
+    <SafeAreaView style={[styles.container]}>
       <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
-      <SafeAreaView style={[styles.alignItemsEnd, styles.p20]}>
-        <TouchableOpacity onPress={() => navigation.push('Options')}>
-          <Icon name="settings" size={40} color="#4f6d7a" />
+      <SafeAreaView style={[styles.alignItemsEnd, styles.p10]}>
+        <TouchableOpacity
+          hitSlop={20}
+          onPress={() => navigation.navigate('Options')}>
+          <Icon name="settings" size={30} color="#4f6d7a" />
         </TouchableOpacity>
       </SafeAreaView>
       <ScrollView scrollEnabled={scrollEnable}>
-        <View style={styles.ptAuto}>
+        <View>
           <View
             style={[
               styles.alignCenter,
@@ -99,36 +112,40 @@ export const Home = ({navigation}: HomeProps) => {
               resizeMode="contain"
             />
           </View>
-
           <Text style={styles.txtHeader}>Currency Converter</Text>
-
           <MenuInput
-            label="USD"
+            label={baseCurrency}
             inputType="numeric"
-            onBtnPress={() => Alert.alert('usd')}
+            onBtnPress={() =>
+              navigation.navigate('CurrencyList', {
+                title: 'Currency Base',
+                selectedCurrency: baseCurrency,
+              })
+            }
             onChangeText={(text: number) => console.log(text)}
             KeyboardType="numeric"
           />
-
           <MenuInput
-            label="IDR "
+            label={targetCurrency}
             inputType="numeric"
-            onBtnPress={() => Alert.alert('idr')}
+            onBtnPress={() =>
+              navigation.navigate('CurrencyList', {
+                title: 'Currency Target',
+                selectedCurrency: targetCurrency,
+              })
+            }
             onChangeText={(text: number) => console.log(text)}
           />
-
           <Text style={styles.txtSubHeader}>
             1 USD = 16.000 IDR as of January 9, 2025
           </Text>
-
           <View style={styles.p20}>
             <Button color="#4f6d7a" title="Revert" onPress={() => {}} />
           </View>
-
           <KeyboardSpacer onToggle={isVisble => setScrollEnable(isVisble)} />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
