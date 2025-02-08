@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.whiteOff,
     flex: 1,
-    justifyContent: 'center',
+    paddingVertical: 10,
   },
   imgContainer: {
     alignItems: 'center',
@@ -35,12 +35,21 @@ const styles = StyleSheet.create({
     width: screen.width * 0.25,
     height: screen.width * 0.25,
   },
+  btnOptions: {
+    alignItems: 'flex-end',
+    padding: 20,
+  },
 });
 
-const Home = () => {
+const Home = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.whiteOff} />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Setting')}
+        style={styles.btnOptions}>
+        <Icon name="settings" size={30} color={colors.matcha} />
+      </TouchableOpacity>
       <View style={styles.imgContainer}>
         <Image
           style={styles.bgLogo}
@@ -53,7 +62,18 @@ const Home = () => {
           resizeMode="contain"
         />
       </View>
-      <FormCurrency />
+      <FormCurrency
+        handleTargetCurrency={() =>
+          navigation.navigate('CurrencyList', {
+            title: 'Target Currency',
+          })
+        }
+        handleSourceCurrency={() =>
+          navigation.navigate('CurrencyList', {
+            title: 'Source Currency',
+          })
+        }
+      />
     </View>
   );
 };

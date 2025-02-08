@@ -4,7 +4,7 @@ import {colors} from '../constants/colors';
 import Separator from './OptionSepator';
 
 interface OptionsItemProps {
-  icon: ReactNode;
+  icon?: ReactNode;
   text: string;
   onTap?: () => void;
 }
@@ -27,7 +27,6 @@ const OptionsItem = ({text, icon, onTap}: OptionsItemProps) => {
         <Text>{text}</Text>
         {icon}
       </TouchableOpacity>
-      <Separator />
     </>
   );
 };

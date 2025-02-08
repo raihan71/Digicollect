@@ -1,6 +1,6 @@
 import React from 'react';
-import Home from './src/screens/Home';
+import StackScreen from './src/components/Navigation/StackNavigation';
 
-const App = () => <Home />;
+const App = () => <StackScreen />;
 
 export default App;

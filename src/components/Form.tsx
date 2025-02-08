@@ -39,11 +39,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Form = () => {
+const Form = ({handleTargetCurrency, handleSourceCurrency}: any) => {
   return (
     <>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity onPress={handleTargetCurrency} style={styles.btn}>
           <Text style={styles.btnTxt}>IDR</Text>
         </TouchableOpacity>
         <TextInput
@@ -54,7 +54,7 @@ const Form = () => {
       </View>
 
       <View style={styles.container}>
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity onPress={handleSourceCurrency} style={styles.btn}>
           <Text style={styles.btnTxt}>USD</Text>
         </TouchableOpacity>
         <TextInput
