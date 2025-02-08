@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   Linking,
@@ -15,7 +15,7 @@ const Options = () => {
     Linking.openURL(url).catch(() => Alert.alert('Oops! link kamu bermasalah'));
   };
 
-  const [theme, setTheme] = React.useState('blue');
+  const [theme, setTheme] = useState('blue');
 
   return (
     <SafeAreaView>

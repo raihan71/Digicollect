@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Button,
   StyleSheet,
@@ -7,7 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import dayjs from 'dayjs';
+import 'dayjs/locale/id';
 import {colors} from '../constants/colors';
+import {currencyFormat} from '../utils/currencyFormat';
+
+dayjs.locale('id');
 
 const styles = StyleSheet.create({
   container: {
@@ -37,41 +42,89 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
   },
+  formInputDisabled: {
+    backgroundColor: '#EBEBE4',
+  },
+  infoCurrency: {
+    textAlign: 'center',
+    color: '#4f6d7a',
+    paddingVertical: 10,
+  },
+  txtDisabled: {
+    color: '#bbb8b8',
+  },
 });
 
-const Form = ({handleTargetCurrency, handleSourceCurrency}: any) => {
+const Form = ({
+  handleTargetCurrency,
+  handleSourceCurrency,
+  editable,
+  submitTxt,
+}: any) => {
+  const [baseCurrency, setBaseCurrency] = useState('USD');
+  const [targetCurrency, setTargetCurrency] = useState('IDR ');
+  const [baseValue, setBaseValue] = useState('1');
+  const rates = 16.275;
+  const dateNow = new Date();
+
+  const handleReverseCurrency = () => {
+    setBaseCurrency(targetCurrency);
+    setTargetCurrency(baseCurrency);
+  };
+
+  const handleChangeNumber = (val: any) => {
+    setBaseValue(val);
+  };
+
   return (
     <>
       <View style={styles.container}>
         <TouchableOpacity onPress={handleTargetCurrency} style={styles.btn}>
-          <Text style={styles.btnTxt}>IDR</Text>
+          <Text style={styles.btnTxt}>{baseCurrency}</Text>
         </TouchableOpacity>
         <TextInput
           keyboardType="numeric"
           style={styles.formInput}
+          onChangeText={handleChangeNumber}
           placeholder=""
+          value={baseValue}
         />
       </View>
 
       <View style={styles.container}>
         <TouchableOpacity onPress={handleSourceCurrency} style={styles.btn}>
-          <Text style={styles.btnTxt}>USD</Text>
+          <Text style={styles.btnTxt}>{targetCurrency}</Text>
         </TouchableOpacity>
         <TextInput
+          editable={editable}
           keyboardType="numeric"
-          style={styles.formInput}
+          style={[
+            styles.formInput,
+            editable === false && [
+              styles.formInputDisabled,
+              styles.txtDisabled,
+            ],
+          ]}
           placeholder=""
+          value={
+            baseValue &&
+            `${currencyFormat((parseFloat(baseValue) * rates).toFixed(2))}`
+          }
         />
       </View>
 
+      <Text style={styles.infoCurrency}>
+        1 {baseCurrency} = {rates} {targetCurrency} per{' '}
+        {dayjs(dateNow).format('DD MMMM YYYY')}
+      </Text>
       <View
         style={{
           padding: 20,
         }}>
         <Button
           color={colors.matcha}
-          title="Ubah Currency"
-          onPress={() => {}}
+          title={submitTxt}
+          onPress={handleReverseCurrency}
         />
       </View>
     </>

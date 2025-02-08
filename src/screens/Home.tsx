@@ -2,16 +2,14 @@ import React from 'react';
 import {
   StatusBar,
   StyleSheet,
-  Text,
   View,
   Image,
   Dimensions,
-  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
+import Icon from '@react-native-vector-icons/feather';
 import {colors} from '../constants/colors';
 import FormCurrency from '../components/Form';
-import Icon from '@react-native-vector-icons/feather';
 
 const screen = Dimensions.get('window');
 
@@ -63,16 +61,18 @@ const Home = ({navigation}: any) => {
         />
       </View>
       <FormCurrency
+        editable={false}
         handleTargetCurrency={() =>
           navigation.navigate('CurrencyList', {
-            title: 'Target Currency',
+            title: 'Mata Uang Asal',
           })
         }
         handleSourceCurrency={() =>
           navigation.navigate('CurrencyList', {
-            title: 'Source Currency',
+            title: 'Mata Uang Tujuan',
           })
         }
+        submitTxt="Ubah Mata Uang"
       />
     </View>
   );
