@@ -56,43 +56,36 @@ const styles = StyleSheet.create({
 });
 
 const Form = ({
-  handleTargetCurrency,
-  handleSourceCurrency,
+  onBtnBaseCurrency,
+  onBtnTargetCurrency,
   editable,
   submitTxt,
+  baseCurrency,
+  targetCurrency,
+  swapCurrencies,
+  rates,
+  baseValue,
+  setBaseValue,
 }: any) => {
-  const [baseCurrency, setBaseCurrency] = useState('USD');
-  const [targetCurrency, setTargetCurrency] = useState('IDR ');
-  const [baseValue, setBaseValue] = useState('1');
-  const rates = 16.275;
   const dateNow = new Date();
-
-  const handleReverseCurrency = () => {
-    setBaseCurrency(targetCurrency);
-    setTargetCurrency(baseCurrency);
-  };
-
-  const handleChangeNumber = (val: any) => {
-    setBaseValue(val);
-  };
 
   return (
     <>
       <View style={styles.container}>
-        <TouchableOpacity onPress={handleTargetCurrency} style={styles.btn}>
+        <TouchableOpacity onPress={onBtnBaseCurrency} style={styles.btn}>
           <Text style={styles.btnTxt}>{baseCurrency}</Text>
         </TouchableOpacity>
         <TextInput
           keyboardType="numeric"
           style={styles.formInput}
-          onChangeText={handleChangeNumber}
+          onChangeText={setBaseValue}
           placeholder=""
           value={baseValue}
         />
       </View>
 
       <View style={styles.container}>
-        <TouchableOpacity onPress={handleSourceCurrency} style={styles.btn}>
+        <TouchableOpacity onPress={onBtnTargetCurrency} style={styles.btn}>
           <Text style={styles.btnTxt}>{targetCurrency}</Text>
         </TouchableOpacity>
         <TextInput
@@ -105,7 +98,6 @@ const Form = ({
               styles.txtDisabled,
             ],
           ]}
-          placeholder=""
           value={
             baseValue &&
             `${currencyFormat((parseFloat(baseValue) * rates).toFixed(2))}`
@@ -124,7 +116,7 @@ const Form = ({
         <Button
           color={colors.matcha}
           title={submitTxt}
-          onPress={handleReverseCurrency}
+          onPress={swapCurrencies}
         />
       </View>
     </>
