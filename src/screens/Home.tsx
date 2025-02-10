@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
 import Icon from '@react-native-vector-icons/feather';
 import {colors} from '../constants/colors';
 import FormCurrency from '../components/Form';
+import {ConversionContext} from '../hooks/ConversionContext';
 
 const screen = Dimensions.get('window');
 
@@ -40,6 +41,11 @@ const styles = StyleSheet.create({
 });
 
 const Home = ({navigation}: any) => {
+  const {baseCurrency, quoteCurrency, swapCurrencies} =
+    useContext(ConversionContext);
+  const [value, setValue] = useState('1');
+  const rates = 16275;
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.whiteOff} />
@@ -61,18 +67,28 @@ const Home = ({navigation}: any) => {
         />
       </View>
       <FormCurrency
+        baseCurrency={baseCurrency}
+        baseValue={value}
         editable={false}
-        handleTargetCurrency={() =>
+        onBtnBaseCurrency={() =>
           navigation.navigate('CurrencyList', {
             title: 'Mata Uang Asal',
+            currency: baseCurrency,
+            isBaseCurrency: true,
           })
         }
-        handleSourceCurrency={() =>
+        onBtnTargetCurrency={() =>
           navigation.navigate('CurrencyList', {
             title: 'Mata Uang Tujuan',
+            currency: quoteCurrency,
+            isBaseCurrency: false,
           })
         }
         submitTxt="Ubah Mata Uang"
+        rates={rates}
+        setBaseValue={(val: any) => setValue(val)}
+        swapCurrencies={() => swapCurrencies()}
+        targetCurrency={quoteCurrency}
       />
     </View>
   );

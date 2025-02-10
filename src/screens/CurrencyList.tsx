@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, FlatList, StatusBar} from 'react-native';
 import currencies from '../data/currencies.json';
 import OptionsItem from '../components/OptionItem';
@@ -6,12 +6,16 @@ import Separator from '../components/OptionSepator';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {colors} from '../constants/colors';
 import Icon from '@react-native-vector-icons/feather';
+import {ConversionContext} from '../hooks/ConversionContext';
 
-const CurrencyList = () => {
+const CurrencyList = ({route}: any) => {
+  const {isBaseCurrency, currency} = route.params || {};
   const navigation = useNavigation<NavigationProp<any>>();
-  const handleSelectCurrency = (currency: string) => {
-    navigation.navigate('Home', {currency});
-    console.log(currency);
+  const {setBaseCurrency, setQuoteCurrency} = useContext(ConversionContext);
+
+  const handleSelectCurrency = (currency: any) => {
+    isBaseCurrency ? setBaseCurrency(currency) : setQuoteCurrency(currency);
+    navigation.navigate('Home');
   };
   return (
     <View>
@@ -19,9 +23,10 @@ const CurrencyList = () => {
       <FlatList
         data={currencies}
         renderItem={({item}) => {
+          const selected = currency === item;
           return (
             <OptionsItem
-              icon={<Icon name="check-circle" size={25} />}
+              icon={selected ? <Icon name="check-circle" size={25} /> : null}
               text={item}
               onTap={() => handleSelectCurrency(item)}
             />
