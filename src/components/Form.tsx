@@ -64,11 +64,10 @@ const Form = ({
   targetCurrency,
   swapCurrencies,
   rates,
+  dateNow,
   baseValue,
   setBaseValue,
 }: any) => {
-  const dateNow = new Date();
-
   return (
     <>
       <View style={styles.container}>

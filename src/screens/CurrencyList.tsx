@@ -14,7 +14,11 @@ const CurrencyList = ({route}: any) => {
   const {setBaseCurrency, setQuoteCurrency} = useContext(ConversionContext);
 
   const handleSelectCurrency = (currency: any) => {
-    isBaseCurrency ? setBaseCurrency(currency) : setQuoteCurrency(currency);
+    if (isBaseCurrency) {
+      setBaseCurrency(currency);
+    } else {
+      setQuoteCurrency(currency);
+    }
     navigation.navigate('Home');
   };
   return (

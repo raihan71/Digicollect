@@ -1,21 +1,55 @@
-import React, {createContext, useState} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
+import {api} from '../utils/api';
+import {Alert} from 'react-native';
 
-export const ConversionContext = createContext({
-  baseCurrency: 'USD',
-  quoteCurrency: 'IDR',
-  setBaseCurrency: (currency: string) => {},
-  setQuoteCurrency: (currency: string) => {},
-  swapCurrencies: () => {},
-});
+interface Rates {
+  [currency: string]: number;
+}
+
+interface ConversionType {
+  baseCurrency: string;
+  quoteCurrency: string;
+  setBaseCurrency: React.Dispatch<React.SetStateAction<string>>;
+  setQuoteCurrency: React.Dispatch<React.SetStateAction<string>>;
+  swapCurrencies: () => void;
+  rates: Rates;
+  date: any;
+  isLoading: boolean;
+}
+
+export const ConversionContext = createContext<ConversionType | any>('');
 
 export const ConversionProvider = ({children}: any) => {
-  const [baseCurrency, setBaseCurrency] = useState('USD');
+  const [baseCurrency, _setBaseCurrency] = useState('USD');
   const [quoteCurrency, setQuoteCurrency] = useState('IDR');
+  const [date, setDate] = useState(new Date());
+  const [rates, setRates] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  const setBaseCurrency = (currency: string) => {
+    setIsLoading(true);
+    return api(`/latest?base=${currency}`)
+      .then((res: any) => {
+        _setBaseCurrency(currency);
+        setRates(res.rates);
+        setDate(new Date(res.date));
+      })
+      .catch((err: any) => {
+        Alert.alert('Error, terjadi kesalahan', err.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   const swapCurrencies = () => {
     setBaseCurrency(quoteCurrency);
     setQuoteCurrency(baseCurrency);
   };
+
+  useEffect(() => {
+    setBaseCurrency(baseCurrency);
+  }, []);
 
   const contextValue = {
     baseCurrency,
@@ -23,6 +57,9 @@ export const ConversionProvider = ({children}: any) => {
     setBaseCurrency,
     setQuoteCurrency,
     swapCurrencies,
+    date,
+    rates,
+    isLoading,
   };
 
   return (

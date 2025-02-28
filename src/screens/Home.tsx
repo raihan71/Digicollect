@@ -6,6 +6,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from '@react-native-vector-icons/feather';
 import {colors} from '../constants/colors';
@@ -41,10 +42,10 @@ const styles = StyleSheet.create({
 });
 
 const Home = ({navigation}: any) => {
-  const {baseCurrency, quoteCurrency, swapCurrencies} =
+  const {baseCurrency, quoteCurrency, swapCurrencies, date, rates, isLoading} =
     useContext(ConversionContext);
   const [value, setValue] = useState('1');
-  const rates = 16275;
+  const conversionRate = rates[quoteCurrency];
 
   return (
     <View style={styles.container}>
@@ -66,30 +67,35 @@ const Home = ({navigation}: any) => {
           resizeMode="contain"
         />
       </View>
-      <FormCurrency
-        baseCurrency={baseCurrency}
-        baseValue={value}
-        editable={false}
-        onBtnBaseCurrency={() =>
-          navigation.navigate('CurrencyList', {
-            title: 'Mata Uang Asal',
-            currency: baseCurrency,
-            isBaseCurrency: true,
-          })
-        }
-        onBtnTargetCurrency={() =>
-          navigation.navigate('CurrencyList', {
-            title: 'Mata Uang Tujuan',
-            currency: quoteCurrency,
-            isBaseCurrency: false,
-          })
-        }
-        submitTxt="Ubah Mata Uang"
-        rates={rates}
-        setBaseValue={(val: any) => setValue(val)}
-        swapCurrencies={() => swapCurrencies()}
-        targetCurrency={quoteCurrency}
-      />
+      {isLoading ? (
+        <ActivityIndicator size="large" color={colors.matcha} />
+      ) : (
+        <FormCurrency
+          baseCurrency={baseCurrency}
+          baseValue={value}
+          editable={false}
+          dateNow={date}
+          onBtnBaseCurrency={() =>
+            navigation.navigate('CurrencyList', {
+              title: 'Mata Uang Asal',
+              currency: baseCurrency,
+              isBaseCurrency: true,
+            })
+          }
+          onBtnTargetCurrency={() =>
+            navigation.navigate('CurrencyList', {
+              title: 'Mata Uang Tujuan',
+              currency: quoteCurrency,
+              isBaseCurrency: false,
+            })
+          }
+          submitTxt="Ubah Mata Uang"
+          rates={conversionRate}
+          setBaseValue={(val: any) => setValue(val)}
+          swapCurrencies={() => swapCurrencies()}
+          targetCurrency={quoteCurrency}
+        />
+      )}
     </View>
   );
 };
